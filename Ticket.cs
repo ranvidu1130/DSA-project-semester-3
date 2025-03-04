@@ -15,8 +15,14 @@
 
     public void Print()
     {
-        Console.WriteLine("----Ticket Details----\n");
+        //Console.WriteLine("----Ticket Details----\n");
         Console.WriteLine($"Row: {Row}, Seat: {Seat}, Price: £{Price}");
         Person.Print();
     }
+    public void Print1()
+    {
+        Console.WriteLine($"Row: {Row}, Seat: {Seat}, Price: £{Price}");
+        Person.Print1();
+    }
+
 }

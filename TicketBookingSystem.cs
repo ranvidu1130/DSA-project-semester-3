@@ -35,11 +35,10 @@ public class TicketBookingSystem
             Console.WriteLine("6)  -> Show person information of a booked seat");
             Console.WriteLine("7)  -> Calculate total price of booked tickets");
             Console.WriteLine("8)  -> Sort booked tickets by price");
-            Console.WriteLine("9)  -> Sort booked tickets by name");
-            Console.WriteLine("10) -> Sort booked tickets by age");
-            Console.WriteLine("11) -> Sort booked tickets by email");
-            Console.WriteLine("12)  -> Save booked tickets to file");
-            Console.WriteLine("13) -> Load booked tickets from file");
+            Console.WriteLine("9)  -> Sort booked tickets by date");
+            Console.WriteLine("10) -> Sort booked tickets by email");
+            Console.WriteLine("11) -> Save booked tickets to file");
+            Console.WriteLine("12) -> Load booked tickets from file");
             Console.WriteLine("00) -> Quit program");
             Console.WriteLine("\n------------------------------------------------\n");
             Console.Write("Enter option: ");
@@ -97,19 +96,16 @@ public class TicketBookingSystem
             case 8:
                 SortTicketsByPrice();
                 break;
-            //case 9:
-            //    SortTicketsByName();
-            //    break;
-            //case 10:
-            //    SortTicketsByAge();
-            //    break;
-            //case 11:
-            //    SortTicketsByEmail();
+            case 9:
+                SortTicketsByDate();
                 break;
-            case 12:
+            case 10:
+                SortTicketsByEmail();
+                break;
+            case 11:
                 SaveToFile();
                 break;
-            case 13:
+            case 12:
                 LoadFromFile();
                 break;
             default:
@@ -166,7 +162,7 @@ public class TicketBookingSystem
 
                 if (email == ticket.Person.Email)
                 {
-                    tickets.RemoveAt(tickets.Index(ticket));
+                    tickets.Remove(ticket);
                     Console.WriteLine($"Ticket for Seat {seatNumber} in Row {row} is canceled successfully.");
                     seat.IsBooked = false;
                 }
@@ -338,7 +334,7 @@ public class TicketBookingSystem
         Console.WriteLine("\nTickets sorted by price:\n");
         foreach (var ticket in ticketArray)
         {
-            ticket.Print();
+            ticket.Print1();
             Console.WriteLine();
         }
     }
@@ -550,4 +546,86 @@ public class TicketBookingSystem
             }
         }
     }
+
+    private void SortTicketsByDate()
+    {
+        var ticketArray = new DSA.DynamicArray<Ticket>(tickets);
+
+        
+        void QuickSort(DSA.DynamicArray<Ticket> tickets, int low, int high)
+        {
+            if (low < high)
+            {
+                int pivotIndex = Partition(tickets, low, high);
+
+                QuickSort(tickets, low, pivotIndex - 1);
+                QuickSort(tickets, pivotIndex + 1, high);
+            }
+        }
+
+        int Partition(DSA.DynamicArray<Ticket> tickets, int low, int high)
+        {
+            var pivot = tickets.At(high);
+            int i = low - 1;
+
+            for (int j = low; j <= high - 1; j++)
+            {
+                DateTime ticketDate = DateTime.ParseExact(tickets.At(j).Person.Date, "yyyy-MM-dd", null);
+                DateTime pivotDate = DateTime.ParseExact(pivot.Person.Date, "yyyy-MM-dd", null);
+
+                if (DateTime.Compare(ticketDate, pivotDate) < 0)
+                {
+                    i++;
+                    var temp = tickets.At(i);
+                    tickets[i] = tickets.At(j);
+                    tickets[j] = temp;
+                }
+            }
+
+            var tempPivot = tickets.At(i + 1);
+            tickets[i + 1] = tickets.At(high);
+            tickets[high] = tempPivot;
+
+            return i + 1;
+        }
+
+        QuickSort(ticketArray, 0, ticketArray.Count - 1);
+
+        Console.WriteLine("\nTickets sorted by date:");
+        foreach (var ticket in ticketArray)
+        {
+            ticket.Print1();
+            Console.WriteLine();
+        }
+    }
+
+    private void SortTicketsByEmail()
+    {
+        var ticketArray = new DSA.DynamicArray<Ticket>(tickets);
+
+        for (int i = 1; i < ticketArray.Count; i++)
+        {
+            Ticket currentTicket = ticketArray.At(i);
+            int j = i - 1;
+
+            while (j >= 0 && string.Compare(ticketArray.At(j).Person.Email, currentTicket.Person.Email) > 0)
+            {
+                ticketArray[j + 1] = ticketArray.At(j);
+                j--;
+            }
+
+            ticketArray[j + 1] = currentTicket;
+        }
+
+        Console.WriteLine("\nTickets sorted by email:\n");
+        foreach (var ticket in ticketArray)
+        {
+            ticket.Print();
+            Console.WriteLine();
+        }
+    }
+
+
 }
+
+

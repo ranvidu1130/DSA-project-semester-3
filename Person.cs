@@ -17,10 +17,17 @@ public class Person
 
     public void Print()
     {
-        Console.WriteLine("\n----Person Details----\n");
+        //Console.WriteLine("\n----Person Details----\n");
         Console.WriteLine($"Name: {Name}");
         Console.WriteLine($"Age: {Age}");
         Console.WriteLine($"Email: {Email}");
         Console.WriteLine($"Date: {Date}");
     }
+
+    public void Print1()
+    {
+        Console.WriteLine($"Name: {Name}");
+        Console.WriteLine($"Date: {Date}");
+    }
 }
+

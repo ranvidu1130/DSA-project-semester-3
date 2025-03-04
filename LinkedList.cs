@@ -90,8 +90,9 @@ public class LinkedList<T>
         Node<T>? temp = Head;
         while (temp != null)
         {
-            if (temp.Equals(val)) { return i; }
+            if (temp.Data.Equals(val)) { return i; }
             temp = temp.Next;
+            i++;
         }
         return -1;
     }
@@ -121,6 +122,12 @@ public class LinkedList<T>
             temp.Next = newNode;
             Count++;
         }
+    }
+
+    public void Remove(T val) { 
+        int index = Index(val);
+        if (index == -1) return;
+        RemoveAt(index);
     }
 
     public void RemoveAt(int index)
